@@ -1,4 +1,4 @@
-# COMPILE EXAMPLES
+# How to Compile Examples
 
 To run the examples locally, you can use `elm-reactor` from the root folder to see Scales.elm and Stream.elm
 
