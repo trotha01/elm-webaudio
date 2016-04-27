@@ -1,3 +1,3 @@
 [submodule "lib/elm-usermedia"]
 	path = lib/elm-usermedia
-	url = git@github.com:giraj/elm-usermedia.git
+	url = https://github.com/giraj/elm-usermedia.git
