@@ -1,4 +1,4 @@
-module WebAudio where
+module WebAudio (..) where
 
 {-| A module for accessing the Web Audio API via Elm.
 
@@ -37,6 +37,9 @@ record notation. For example, a Biquad Filter Node has a "frequency" param. It
 could be accessed with: `node.frequency`
 
 @docs AudioParam, setValue, getValue, setValueAtTime, linearRampToValue, exponentialRampToValue, setTargetAtTime, setValueCurveAtTime, cancelScheduledValues
+
+# Adding missing functions
+@docs MediaStreamAudioSourceNode, OfflineAudioContext, createMediaStreamAudioSourceNode, loadAudioBufferFromUrl, startOfflineRendering
 
 # Audio Buffers
 
@@ -192,7 +195,10 @@ import UserMedia exposing (MediaStream)
 Think of the `DefaultContext` as a global singleton. Just use the `DefaultContext`
 unless there's some reason you need to have more than one context.
 -}
-type AudioContext = AudioContext | DefaultContext
+type AudioContext
+  = AudioContext
+  | DefaultContext
+
 
 {-| Create a new AudioContext
 
@@ -201,18 +207,29 @@ Instead of creating a context, you can use the `DefaultContext`. The
 sufficient for most people.
 -}
 createContext : () -> AudioContext
-createContext = Native.WebAudio.createContext
+createContext =
+  Native.WebAudio.createContext
 
-{-| Get the context's sample rate -}
+
+{-| Get the context's sample rate
+-}
 getSampleRate : AudioContext -> Float
-getSampleRate = Native.WebAudio.getSampleRate
+getSampleRate =
+  Native.WebAudio.getSampleRate
 
-{-| Get the context's current time -}
+
+{-| Get the context's current time
+-}
 getCurrentTime : AudioContext -> Float
-getCurrentTime = Native.WebAudio.getCurrentTime
+getCurrentTime =
+  Native.WebAudio.getCurrentTime
 
-{-| The OfflineAudioContext -}
-type alias OfflineAudioContext = {context: AudioContext, signal: Signal (Maybe AudioBuffer)}
+
+{-| The OfflineAudioContext
+-}
+type alias OfflineAudioContext =
+  { context : AudioContext, signal : Signal (Maybe AudioBuffer) }
+
 
 {-| Create a new Offline AudioContext
 
@@ -225,15 +242,17 @@ fields:
   Context has finished rendering audio to the AudioBuffer
 -}
 createOfflineContext : Int -> Int -> Float -> OfflineAudioContext
-createOfflineContext = Native.WebAudio.createOfflineContext
+createOfflineContext =
+  Native.WebAudio.createOfflineContext
+
 
 {-| Begin rendering audio in an Offline Audio Context
 
 When rendering has finished, the context.signal `Signal` will raise.
 -}
 startOfflineRendering : OfflineAudioContext -> OfflineAudioContext
-startOfflineRendering = Native.WebAudio.startOfflineRendering
-
+startOfflineRendering =
+  Native.WebAudio.startOfflineRendering
 
 
 {-| AudioParams
@@ -241,77 +260,118 @@ startOfflineRendering = Native.WebAudio.startOfflineRendering
 An AudioParam is used in a lot of places to allow you to either set a static
 value (such as a frequency, gain, etc), or to schedule changes over time.
 -}
-type AudioParam = AudioParam String
+type AudioParam
+  = AudioParam String
 
-{-| Set the static value of the param -}
+
+{-| Set the static value of the param
+-}
 setValue : Float -> AudioParam -> AudioParam
-setValue = Native.WebAudio.setValue
+setValue =
+  Native.WebAudio.setValue
 
-{-| Get the current value of the param -}
+
+{-| Get the current value of the param
+-}
 getValue : AudioParam -> Float
-getValue = Native.WebAudio.getValue
+getValue =
+  Native.WebAudio.getValue
 
-{-| Schedule the AudioParam to change values at a specific time -}
+
+{-| Schedule the AudioParam to change values at a specific time
+-}
 setValueAtTime : Float -> Float -> AudioParam -> AudioParam
-setValueAtTime = Native.WebAudio.setValueAtTime
+setValueAtTime =
+  Native.WebAudio.setValueAtTime
+
 
 {-| Schedule the AudioParam to linearly ramp to a new value, finishing at the
 specified time.
 -}
 linearRampToValue : Float -> Float -> AudioParam -> AudioParam
-linearRampToValue = Native.WebAudio.linearRampToValue
+linearRampToValue =
+  Native.WebAudio.linearRampToValue
+
 
 {-| Schedule the AudioParam to exponentially ramp to a new value, finishing at
 the specified time.
 -}
 exponentialRampToValue : Float -> Float -> AudioParam -> AudioParam
-exponentialRampToValue = Native.WebAudio.exponentialRampToValue
+exponentialRampToValue =
+  Native.WebAudio.exponentialRampToValue
+
 
 {-| Schedule the AudioParam to exponentially approach the target, starting at
 the specified time. The "constant" determines how quickly the value changes
 with the value changing roughly 63.2% in the first time constant.
 -}
 setTargetAtTime : Float -> Float -> Float -> AudioParam -> AudioParam
-setTargetAtTime = Native.WebAudio.setTargetAtTime
+setTargetAtTime =
+  Native.WebAudio.setTargetAtTime
+
 
 {-| Schedule a curve of values to start at the given time and run for the
 specified duration. Each value will take effect for N / duration seconds.
 -}
 setValueCurveAtTime : List Float -> Float -> Float -> AudioParam -> AudioParam
-setValueCurveAtTime = Native.WebAudio.setValueCurveAtTime
+setValueCurveAtTime =
+  Native.WebAudio.setValueCurveAtTime
 
-{-| Cancel all scheduled changes at and after the specified time. -}
+
+{-| Cancel all scheduled changes at and after the specified time.
+-}
 cancelScheduledValues : Float -> AudioParam -> AudioParam
-cancelScheduledValues = Native.WebAudio.cancelScheduledValues
+cancelScheduledValues =
+  Native.WebAudio.cancelScheduledValues
 
 
+{-| AudioBuffers
+-}
+type AudioBuffer
+  = AudioBuffer
 
-{-| AudioBuffers -}
-type AudioBuffer = AudioBuffer
 
-{-| Load an Audio Buffer from a URL -}
-loadAudioBufferFromUrl: AudioContext -> String -> Signal (Maybe AudioBuffer)
-loadAudioBufferFromUrl = Native.WebAudio.loadAudioBufferFromUrl
+{-| Load an Audio Buffer from a URL
+-}
+loadAudioBufferFromUrl : AudioContext -> String -> Signal (Maybe AudioBuffer)
+loadAudioBufferFromUrl =
+  Native.WebAudio.loadAudioBufferFromUrl
 
-{-| Retrieve the sample rate of the AudioBuffer -}
+
+{-| Retrieve the sample rate of the AudioBuffer
+-}
 getBufferSampleRate : AudioBuffer -> Float
-getBufferSampleRate = Native.WebAudio.getBufferSampleRate
+getBufferSampleRate =
+  Native.WebAudio.getBufferSampleRate
 
-{-| Get the length of the AudioBuffer in sample frames -}
+
+{-| Get the length of the AudioBuffer in sample frames
+-}
 getBufferLength : AudioBuffer -> Int
-getBufferLength = Native.WebAudio.getBufferLength
+getBufferLength =
+  Native.WebAudio.getBufferLength
 
-{-| Get the duration of the AudioBuffer in seconds -}
+
+{-| Get the duration of the AudioBuffer in seconds
+-}
 getBufferDuration : AudioBuffer -> Float
-getBufferDuration = Native.WebAudio.getBufferDuration
+getBufferDuration =
+  Native.WebAudio.getBufferDuration
 
-{-| Retrieve the number of channels in the AudioBuffer -}
+
+{-| Retrieve the number of channels in the AudioBuffer
+-}
 getBufferNumberOfChannels : AudioBuffer -> Int
-getBufferNumberOfChannels = Native.WebAudio.getBufferNumberOfChannels
+getBufferNumberOfChannels =
+  Native.WebAudio.getBufferNumberOfChannels
 
-{-| Get the buffer's data for the specified channel into an array -}
+
+{-| Get the buffer's data for the specified channel into an array
+-}
 getChannelData : Int -> AudioBuffer -> List Float
-getChannelData = Native.WebAudio.getChannelData
+getChannelData =
+  Native.WebAudio.getChannelData
+
 
 {-| Get a slice of channel data from the buffer.
 
@@ -324,7 +384,9 @@ a small chunk of it. Parameters are:
 * The AudioBuffer
 -}
 getChannelDataSlice : Int -> Int -> Int -> AudioBuffer -> List Float
-getChannelDataSlice = Native.WebAudio.getChannelDataSlice
+getChannelDataSlice =
+  Native.WebAudio.getChannelDataSlice
+
 
 {-| Set a slice of channel data in the buffer.
 
@@ -336,8 +398,8 @@ This method allows you to modify the channel data. Parameters are:
 * The AudioBuffer
 -}
 setChannelDataSlice : Int -> Int -> List Float -> AudioBuffer -> AudioBuffer
-setChannelDataSlice = Native.WebAudio.setChannelDataSlice
-
+setChannelDataSlice =
+  Native.WebAudio.setChannelDataSlice
 
 
 {-| AudioNodes
@@ -352,13 +414,24 @@ Audio Nodes have the following properties:
   * outputs: The number of outputs for this node. 0 means this is a destination
     node.
 -}
-type alias AudioNode a = { a | inputs:Int, outputs:Int }
+type alias AudioNode a =
+  { a | inputs : Int, outputs : Int }
 
-{-| How channels are counted during up-mixing and down-mixing -}
-type ChannelCountMode = Max | ClampedMax | Explicit
 
-{-| How individual channels are treated when up-mixing and down-mixing -}
-type ChannelInterpretation = Speakers | Discrete
+{-| How channels are counted during up-mixing and down-mixing
+-}
+type ChannelCountMode
+  = Max
+  | ClampedMax
+  | Explicit
+
+
+{-| How individual channels are treated when up-mixing and down-mixing
+-}
+type ChannelInterpretation
+  = Speakers
+  | Discrete
+
 
 {-| Connect Audio Nodes
 
@@ -369,7 +442,9 @@ be connected to multiple nodes, and multiple nodes can be connected to a single
 input. This function will return node1 for chaining.
 -}
 connectNodes : AudioNode b -> Int -> Int -> AudioNode a -> AudioNode a
-connectNodes = Native.WebAudio.connectNodes
+connectNodes =
+  Native.WebAudio.connectNodes
+
 
 {-| Connect an Audio Node to an Audio Param
 
@@ -380,7 +455,9 @@ can be connected to multiple AudioParams, and multiple AudioParams can be
 connected to a single node. This function will return the node for chaining.
 -}
 connectToParam : AudioParam b -> Int -> AudioNode a -> AudioNode a
-connectToParam = Native.WebAudio.connectToParam
+connectToParam =
+  Native.WebAudio.connectToParam
+
 
 {-| Get a Node's Channel Count
 
@@ -389,7 +466,9 @@ is 2 for most nodes, but some nodes determine this based on other settings. If
 the node has no inputs, this setting has no effect.
 -}
 getChannelCount : AudioNode a -> Int
-getChannelCount = Native.WebAudio.getChannelCount
+getChannelCount =
+  Native.WebAudio.getChannelCount
+
 
 {-| Set a Node's Channel Count
 
@@ -398,31 +477,41 @@ is 2 for most nodes, but some nodes determine this based on other settings. If
 the node has no inputs, this setting has no effect.
 -}
 setChannelCount : Int -> AudioNode a -> AudioNode a
-setChannelCount = Native.WebAudio.setChannelCount
+setChannelCount =
+  Native.WebAudio.setChannelCount
+
 
 {-| Get a Node's Channel Count Mode
 @docs ChannelCountMode
 -}
 getChannelCountMode : AudioNode a -> ChannelCountMode
-getChannelCountMode = Native.WebAudio.getChannelCountMode
+getChannelCountMode =
+  Native.WebAudio.getChannelCountMode
+
 
 {-| Set a Node's Channel Count Mode - returns the node itself for chaining.
 @docs ChannelCountMode
 -}
 setChannelCountMode : ChannelCountMode -> AudioNode a -> AudioNode a
-setChannelCountMode = Native.WebAudio.setChannelCountMode
+setChannelCountMode =
+  Native.WebAudio.setChannelCountMode
+
 
 {-| Get a Node's Channel Interpretation
 @docs ChannelInterpretation
 -}
 getChannelInterpretation : AudioNode a -> ChannelInterpretation
-getChannelInterpretation = Native.WebAudio.getChannelInterpretation
+getChannelInterpretation =
+  Native.WebAudio.getChannelInterpretation
+
 
 {-| Set a Node's Channel Interpretation - returns the node itself for chaining.
 @docs ChannelInterpretation
 -}
 setChannelInterpretation : ChannelInterpretation -> AudioNode a -> AudioNode a
-setChannelInterpretation = Native.WebAudio.setChannelInterpretation
+setChannelInterpretation =
+  Native.WebAudio.setChannelInterpretation
+
 
 {-| "Tap" a node
 
@@ -438,21 +527,32 @@ tapNode .frequency (\f -> setValue 440.0 f) node |> startOscillator 0.0
 -}
 tapNode : (a -> b) -> (b -> c) -> a -> a
 tapNode f t n =
-  let _ = t <| f n
-  in n
+  let
+    _ =
+      t <| f n
+  in
+    n
 
 
+{-| Type of an AnalyserNode
+-}
+type alias AnalyserNode =
+  AudioNode {}
 
-{-| Type of an AnalyserNode -}
-type alias AnalyserNode = AudioNode {}
 
-{-| Create an AnalyserNode -}
+{-| Create an AnalyserNode
+-}
 createAnalyserNode : AudioContext -> AnalyserNode
-createAnalyserNode = Native.WebAudio.createAnalyserNode
+createAnalyserNode =
+  Native.WebAudio.createAnalyserNode
 
-{-| Get the FFT Size of an Analyser Node -}
+
+{-| Get the FFT Size of an Analyser Node
+-}
 getFFTSize : AnalyserNode -> Int
-getFFTSize = Native.WebAudio.getFFTSize
+getFFTSize =
+  Native.WebAudio.getFFTSize
+
 
 {-| Set the FFT Size of an Analyser Node
 
@@ -460,33 +560,48 @@ The FFT Size must be a power of 2 between 32 to 2048. Default is 2048. This
 function returns the AnalyserNode for chaining
 -}
 setFFTSize : Int -> AnalyserNode -> AnalyserNode
-setFFTSize = Native.WebAudio.setFFTSize
+setFFTSize =
+  Native.WebAudio.setFFTSize
 
-{-| Get the maximum power in the scaling range of the AnalyserNode -}
+
+{-| Get the maximum power in the scaling range of the AnalyserNode
+-}
 getMaxDecibels : AnalyserNode -> Float
-getMaxDecibels = Native.WebAudio.getMaxDecibels
+getMaxDecibels =
+  Native.WebAudio.getMaxDecibels
+
 
 {-| Set the maximum power in the scaling range of the AnalyserNode
 
 The default is -30. This function returns the AnalyserNode for chaining.
 -}
 setMaxDecibels : Float -> AnalyserNode -> AnalyserNode
-setMaxDecibels = Native.WebAudio.setMaxDecibels
+setMaxDecibels =
+  Native.WebAudio.setMaxDecibels
 
-{-| Get the minimum power in the scaling range of the AnalyserNode -}
+
+{-| Get the minimum power in the scaling range of the AnalyserNode
+-}
 getMinDecibels : AnalyserNode -> Float
-getMinDecibels = Native.WebAudio.getMinDecibels
+getMinDecibels =
+  Native.WebAudio.getMinDecibels
+
 
 {-| Set the minimum power in the scaling range of the AnalyserNode
 
 The default is -100. This function returns the AnalyserNode for chaining.
 -}
 setMinDecibels : Float -> AnalyserNode -> AnalyserNode
-setMinDecibels = Native.WebAudio.setMinDecibels
+setMinDecibels =
+  Native.WebAudio.setMinDecibels
 
-{-| Get the smoothing constant for the AnalyserNode -}
+
+{-| Get the smoothing constant for the AnalyserNode
+-}
 getSmoothingConstant : AnalyserNode -> Float
-getSmoothingConstant = Native.WebAudio.getSmoothingConstant
+getSmoothingConstant =
+  Native.WebAudio.getSmoothingConstant
+
 
 {-| Set the smoothing constant for the AnalyserNode
 
@@ -494,7 +609,9 @@ A value from 0 to 1, where 0 represents no averaging. Default is 0.8. This
 function returns the AnalyserNode for chaining.
 -}
 setSmoothingConstant : Float -> AnalyserNode -> AnalyserNode
-setSmoothingConstant = Native.WebAudio.setSmoothingConstant
+setSmoothingConstant =
+  Native.WebAudio.setSmoothingConstant
+
 
 {-| Get frequency data from the AnalyserNode
 
@@ -502,7 +619,9 @@ A value of 0 equals the minDecibels setting, and a value of 255 equals the
 maxDecibels setting.
 -}
 getByteFrequencyData : AnalyserNode -> List Int
-getByteFrequencyData = Native.WebAudio.getByteFrequencyData
+getByteFrequencyData =
+  Native.WebAudio.getByteFrequencyData
+
 
 {-| Get time domain data from the AnalyserNode
 
@@ -510,62 +629,96 @@ A value of 0 equals the minDecibels setting, and a value of 255 equals the
 maxDecibels setting.
 -}
 getByteTimeDomainData : AnalyserNode -> List Int
-getByteTimeDomainData = Native.WebAudio.getByteTimeDomainData
+getByteTimeDomainData =
+  Native.WebAudio.getByteTimeDomainData
+
 
 {-| Get frequency data from the AnalyserNode
 
 Values are in the range of minDecibels to maxDecibels.
 -}
 getFloatFrequencyData : AnalyserNode -> List Float
-getFloatFrequencyData = Native.WebAudio.getFloatFrequencyData
+getFloatFrequencyData =
+  Native.WebAudio.getFloatFrequencyData
+
 
 {-| Get time domain data from the AnalyserNode
 
 Values are in the range of minDecibels to maxDecibels.
 -}
 getFloatTimeDomainData : AnalyserNode -> List Float
-getFloatTimeDomainData = Native.WebAudio.getFloatTimeDomainData
+getFloatTimeDomainData =
+  Native.WebAudio.getFloatTimeDomainData
 
 
+{-| Type of an AudioBufferSourceNode
+-}
+type alias AudioBufferSourceNode =
+  AudioNode { playbackRate : AudioParam, ended : Signal Bool }
 
-{-| Type of an AudioBufferSourceNode -}
-type alias AudioBufferSourceNode = AudioNode { playbackRate:AudioParam, ended: Signal Bool }
 
-{-| Create an AudioBufferSourceNode -}
+{-| Create an AudioBufferSourceNode
+-}
 createAudioBufferSourceNode : AudioContext -> AudioBufferSourceNode
-createAudioBufferSourceNode = Native.WebAudio.createAudioBufferSourceNode
+createAudioBufferSourceNode =
+  Native.WebAudio.createAudioBufferSourceNode
 
-{-| Get the AudioBuffer associated with the AudioBufferSourceNode -}
+
+{-| Get the AudioBuffer associated with the AudioBufferSourceNode
+-}
 getAudioBufferFromNode : AudioBufferSourceNode -> AudioBuffer
-getAudioBufferFromNode = Native.WebAudio.getAudioBufferFromNode
+getAudioBufferFromNode =
+  Native.WebAudio.getAudioBufferFromNode
 
-{-| Set the AudioBuffer associated with the AudioBufferSourceNode -}
+
+{-| Set the AudioBuffer associated with the AudioBufferSourceNode
+-}
 setAudioBufferForNode : AudioBuffer -> AudioBufferSourceNode -> AudioBufferSourceNode
-setAudioBufferForNode = Native.WebAudio.setAudioBufferForNode
+setAudioBufferForNode =
+  Native.WebAudio.setAudioBufferForNode
 
-{-| Get whether or not the AudioBufferSourceNode is looping. -}
+
+{-| Get whether or not the AudioBufferSourceNode is looping.
+-}
 getAudioBufferIsLooping : AudioBufferSourceNode -> Bool
-getAudioBufferIsLooping = Native.WebAudio.getAudioBufferIsLooping
+getAudioBufferIsLooping =
+  Native.WebAudio.getAudioBufferIsLooping
 
-{-| Set whether or not the AudioBufferSourceNode should loop. -}
+
+{-| Set whether or not the AudioBufferSourceNode should loop.
+-}
 setAudioBufferIsLooping : Bool -> AudioBufferSourceNode -> AudioBufferSourceNode
-setAudioBufferIsLooping = Native.WebAudio.setAudioBufferIsLooping
+setAudioBufferIsLooping =
+  Native.WebAudio.setAudioBufferIsLooping
 
-{-| Get the starting point for looping in seconds. -}
+
+{-| Get the starting point for looping in seconds.
+-}
 getAudioBufferLoopStart : AudioBufferSourceNode -> Float
-getAudioBufferLoopStart = Native.WebAudio.getAudioBufferLoopStart
+getAudioBufferLoopStart =
+  Native.WebAudio.getAudioBufferLoopStart
 
-{-| Set the starting point for looping in seconds. -}
+
+{-| Set the starting point for looping in seconds.
+-}
 setAudioBufferLoopStart : Float -> AudioBufferSourceNode -> AudioBufferSourceNode
-setAudioBufferLoopStart = Native.WebAudio.setAudioBufferLoopStart
+setAudioBufferLoopStart =
+  Native.WebAudio.setAudioBufferLoopStart
 
-{-| Get the ending point for the looping in seconds. -}
+
+{-| Get the ending point for the looping in seconds.
+-}
 getAudioBufferLoopEnd : AudioBufferSourceNode -> Float
-getAudioBufferLoopEnd = Native.WebAudio.getAudioBufferLoopEnd
+getAudioBufferLoopEnd =
+  Native.WebAudio.getAudioBufferLoopEnd
 
-{-| Set the ending point for the looping in seconds. -}
+
+{-| Set the ending point for the looping in seconds.
+-}
 setAudioBufferLoopEnd : Float -> AudioBufferSourceNode -> AudioBufferSourceNode
-setAudioBufferLoopEnd = Native.WebAudio.setAudioBufferLoopEnd
+setAudioBufferLoopEnd =
+  Native.WebAudio.setAudioBufferLoopEnd
+
 
 {-| Start the AudioBufferSourceNode
 
@@ -575,51 +728,77 @@ The parameters are:
 * The duration to play - if Nothing, plays until the end
 -}
 startAudioBufferNode : Float -> Float -> Maybe Float -> AudioBufferSourceNode -> AudioBufferSourceNode
-startAudioBufferNode = Native.WebAudio.startAudioBufferNode
+startAudioBufferNode =
+  Native.WebAudio.startAudioBufferNode
+
 
 {-| Stops the AudioBufferSourceNode
 
 You may specify when to stop it.
 -}
 stopAudioBufferNode : Float -> AudioBufferSourceNode -> AudioBufferSourceNode
-stopAudioBufferNode = Native.WebAudio.stopAudioBufferNode
+stopAudioBufferNode =
+  Native.WebAudio.stopAudioBufferNode
 
 
+{-| Type of an AudioDestinationNode
+-}
+type alias AudioDestinationNode =
+  AudioNode {}
 
-
-{-| Type of an AudioDestinationNode -}
-type alias AudioDestinationNode = AudioNode {}
 
 {-| Get the AudioDestinationNode for the given context
 
 Each context has only one AudioDestinationNode.
 -}
 getDestinationNode : AudioContext -> AudioDestinationNode
-getDestinationNode = Native.WebAudio.getDestinationNode
+getDestinationNode =
+  Native.WebAudio.getDestinationNode
 
-{-| Get the maximum number of channels -}
+
+{-| Get the maximum number of channels
+-}
 getMaxChannelCount : AudioDestinationNode -> Int
-getMaxChannelCount = Native.WebAudio.getMaxChannelCount
+getMaxChannelCount =
+  Native.WebAudio.getMaxChannelCount
 
 
 
 {- TODO: Type of an AudioWorkerNode -}
 
 
+{-| Type of a BiquadFilterNode
+-}
+type alias BiquadFilterNode =
+  AudioNode { frequency : AudioParam, detune : AudioParam, q : AudioParam, gain : AudioParam }
 
-{-| Type of a BiquadFilterNode -}
-type alias BiquadFilterNode = AudioNode { frequency:AudioParam, detune:AudioParam, q:AudioParam, gain:AudioParam }
 
-{-| Biquad Filter Type -}
-type BiquadFilterType = LowPass | HighPass | BandPass | LowShelf | HighShelf | Peaking | Notch | AllPass
+{-| Biquad Filter Type
+-}
+type BiquadFilterType
+  = LowPass
+  | HighPass
+  | BandPass
+  | LowShelf
+  | HighShelf
+  | Peaking
+  | Notch
+  | AllPass
 
-{-| Create a BiquadFilterNode -}
+
+{-| Create a BiquadFilterNode
+-}
 createBiquadFilterNode : AudioContext -> BiquadFilterNode
-createBiquadFilterNode = Native.WebAudio.createBiquadFilterNode
+createBiquadFilterNode =
+  Native.WebAudio.createBiquadFilterNode
 
-{-| Get the type of the BiquadFilterNode -}
+
+{-| Get the type of the BiquadFilterNode
+-}
 getFilterType : BiquadFilterNode -> BiquadFilterType
-getFilterType = Native.WebAudio.getFilterType
+getFilterType =
+  Native.WebAudio.getFilterType
+
 
 {-| Set the type of the BiquadFilterNode
 
@@ -627,144 +806,207 @@ The type of filter determines what the parameters mean. This function returns
 the BiquadFilterNode for chaining.
 -}
 setFilterType : BiquadFilterType -> BiquadFilterNode -> BiquadFilterNode
-setFilterType = Native.WebAudio.setFilterType
+setFilterType =
+  Native.WebAudio.setFilterType
 
 
+{-| Type of a ChannelMergerNode
+-}
+type alias ChannelMergerNode =
+  AudioNode {}
 
-{-| Type of a ChannelMergerNode -}
-type alias ChannelMergerNode = AudioNode {}
 
 {-| Create a ChannelMergerNode
 
 You may specify the number of inputs as the second parameter.
 -}
 createChannelMergerNode : AudioContext -> Int -> ChannelMergerNode
-createChannelMergerNode = Native.WebAudio.createChannelMergerNode
+createChannelMergerNode =
+  Native.WebAudio.createChannelMergerNode
 
 
+{-| Type of a ChannelSplitterNode
+-}
+type alias ChannelSplitterNode =
+  AudioNode {}
 
-{-| Type of a ChannelSplitterNode -}
-type alias ChannelSplitterNode = AudioNode {}
 
 {-| Create a ChannelSplitterNode
 
 You may specify the number of outputs as the second parameter
 -}
 createChannelSplitterNode : AudioContext -> Int -> ChannelSplitterNode
-createChannelSplitterNode = Native.WebAudio.createChannelSplitterNode
+createChannelSplitterNode =
+  Native.WebAudio.createChannelSplitterNode
 
 
 
 {- TODO: Type of a ConvolverNode -}
 
 
+{-| Type of a DelayNode
+-}
+type alias DelayNode =
+  AudioNode { delayTime : AudioParam }
 
-{-| Type of a DelayNode -}
-type alias DelayNode = AudioNode { delayTime:AudioParam }
 
 {-| Create a DelayNode
 
 You may specify the maximum delay time as the second parameter.
 -}
 createDelayNode : AudioContext -> Float -> DelayNode
-createDelayNode = Native.WebAudio.createDelayNode
+createDelayNode =
+  Native.WebAudio.createDelayNode
 
 
+{-| Type of a DynamicsCompressorNode
+-}
+type alias DynamicsCompressorNode =
+  AudioNode { threshold : AudioParam, knee : AudioParam, ratio : AudioParam, reduction : AudioParam, attack : AudioParam, release : AudioParam }
 
-{-| Type of a DynamicsCompressorNode -}
-type alias DynamicsCompressorNode = AudioNode { threshold:AudioParam, knee:AudioParam, ratio:AudioParam, reduction:AudioParam, attack:AudioParam, release:AudioParam }
 
-{-| Create a DynamicsCompressorNode -}
+{-| Create a DynamicsCompressorNode
+-}
 createDynamicsCompressorNode : AudioContext -> DynamicsCompressorNode
-createDynamicsCompressorNode = Native.WebAudio.createDynamicsCompressorNode
+createDynamicsCompressorNode =
+  Native.WebAudio.createDynamicsCompressorNode
 
 
+{-| Type of a GainNode
+-}
+type alias GainNode =
+  AudioNode { gain : AudioParam }
 
-{-| Type of a GainNode -}
-type alias GainNode = AudioNode { gain:AudioParam }
 
-{-| Create a GainNode -}
+{-| Create a GainNode
+-}
 createGainNode : AudioContext -> GainNode
-createGainNode = Native.WebAudio.createGainNode
+createGainNode =
+  Native.WebAudio.createGainNode
 
 
+{-| Type of a MediaElementAudioSourceNode
+-}
+type alias MediaElementAudioSourceNode =
+  AudioNode {}
 
-{-| Type of a MediaElementAudioSourceNode -}
-type alias MediaElementAudioSourceNode = AudioNode {}
 
-{-| Create a MediaElementAudioSourceNode using a hidden audio tag -}
+{-| Create a MediaElementAudioSourceNode using a hidden audio tag
+-}
 createHiddenMediaElementAudioSourceNode : AudioContext -> MediaElementAudioSourceNode
-createHiddenMediaElementAudioSourceNode = Native.WebAudio.createHiddenMediaElementAudioSourceNode
+createHiddenMediaElementAudioSourceNode =
+  Native.WebAudio.createHiddenMediaElementAudioSourceNode
 
-{-| Get whether or not the MediaElementAudioSourceNode should loop -}
+
+{-| Get whether or not the MediaElementAudioSourceNode should loop
+-}
 getMediaElementIsLooping : MediaElementAudioSourceNode -> Bool
-getMediaElementIsLooping = Native.WebAudio.getMediaElementIsLooping
+getMediaElementIsLooping =
+  Native.WebAudio.getMediaElementIsLooping
 
-{-| Set whether or not the MediaElementAudioSourceNode should loop -}
+
+{-| Set whether or not the MediaElementAudioSourceNode should loop
+-}
 setMediaElementIsLooping : Bool -> MediaElementAudioSourceNode -> MediaElementAudioSourceNode
-setMediaElementIsLooping = Native.WebAudio.setMediaElementIsLooping
+setMediaElementIsLooping =
+  Native.WebAudio.setMediaElementIsLooping
 
-{-| Get the source of the MediaElementAudioSourceNode -}
+
+{-| Get the source of the MediaElementAudioSourceNode
+-}
 getMediaElementSource : MediaElementAudioSourceNode -> String
-getMediaElementSource = Native.WebAudio.getMediaElementSource
+getMediaElementSource =
+  Native.WebAudio.getMediaElementSource
 
-{-| Set the source of the MediaElementAudioSourceNode -}
+
+{-| Set the source of the MediaElementAudioSourceNode
+-}
 setMediaElementSource : String -> MediaElementAudioSourceNode -> MediaElementAudioSourceNode
-setMediaElementSource = Native.WebAudio.setMediaElementSource
+setMediaElementSource =
+  Native.WebAudio.setMediaElementSource
 
-{-| Play the MediaElementAudioSourceNode -}
+
+{-| Play the MediaElementAudioSourceNode
+-}
 playMediaElement : MediaElementAudioSourceNode -> MediaElementAudioSourceNode
-playMediaElement = Native.WebAudio.playMediaElement
+playMediaElement =
+  Native.WebAudio.playMediaElement
 
-{-| Pause the MediaElementAudioSourceNode -}
+
+{-| Pause the MediaElementAudioSourceNode
+-}
 pauseMediaElement : MediaElementAudioSourceNode -> MediaElementAudioSourceNode
-pauseMediaElement = Native.WebAudio.pauseMediaElement
+pauseMediaElement =
+  Native.WebAudio.pauseMediaElement
 
 
+{-| TODO: add documentation here
+-}
+type alias MediaStreamAudioSourceNode =
+  AudioNode {}
 
-type alias MediaStreamAudioSourceNode = AudioNode {}
 
+{-| TODO: add documentation here
+-}
 createMediaStreamAudioSourceNode : AudioContext -> MediaStream -> MediaStreamAudioSourceNode
-createMediaStreamAudioSourceNode = Native.WebAudio.createMediaStreamAudioSourceNode
+createMediaStreamAudioSourceNode =
+  Native.WebAudio.createMediaStreamAudioSourceNode
+
 
 
 {- TODO: Type of a MediaStreamAudioDestinationNode -}
 
 
+{-| Type of an OscillatorNode
+-}
+type alias OscillatorNode =
+  AudioNode { frequency : AudioParam, detune : AudioParam }
 
-{-| Type of an OscillatorNode -}
-type alias OscillatorNode = AudioNode { frequency:AudioParam, detune:AudioParam }
 
 {-| Wave types for OscillatorNodes
 
 TODO: Custom
 -}
-type OscillatorWaveType = Sine | Square | Sawtooth | Triangle
+type OscillatorWaveType
+  = Sine
+  | Square
+  | Sawtooth
+  | Triangle
+
 
 {-| Create an OscillatorNode
 
 Second parameter is the wave type of the oscillator
 -}
 createOscillatorNode : AudioContext -> OscillatorWaveType -> OscillatorNode
-createOscillatorNode = Native.WebAudio.createOscillatorNode
+createOscillatorNode =
+  Native.WebAudio.createOscillatorNode
 
-{-| Get the oscillator wave type -}
+
+{-| Get the oscillator wave type
+-}
 getOscillatorWaveType : OscillatorNode -> OscillatorWaveType
-getOscillatorWaveType = Native.WebAudio.getOscillatorWaveType
+getOscillatorWaveType =
+  Native.WebAudio.getOscillatorWaveType
+
 
 {-| Set the oscillator wave type
 
 This function returns the oscillator for chaining.
 -}
 setOscillatorWaveType : OscillatorWaveType -> OscillatorNode -> OscillatorNode
-setOscillatorWaveType = Native.WebAudio.setOscillatorWaveType
+setOscillatorWaveType =
+  Native.WebAudio.setOscillatorWaveType
+
 
 {-| Schedule the Oscillator to start
 
 This method returns the oscillator for chaining.
 -}
 startOscillator : Float -> OscillatorNode -> OscillatorNode
-startOscillator = Native.WebAudio.startOscillator
+startOscillator =
+  Native.WebAudio.startOscillator
+
 
 {-| Schedule a stop time for the Oscillator.
 
@@ -781,107 +1023,175 @@ will result in a javascript error. It's not pretty, but, honestly, neither is
 the WebAudio Javascript API.
 -}
 stopOscillator : Float -> OscillatorNode -> ()
-stopOscillator = Native.WebAudio.stopOscillator
+stopOscillator =
+  Native.WebAudio.stopOscillator
 
 
+{-| Type of a PannerNode
+-}
+type alias PannerNode =
+  AudioNode {}
 
-{-| Type of a PannerNode -}
-type alias PannerNode = AudioNode {}
 
-{-| Panning Model -}
-type PanningModel = EqualPower | HRTF
+{-| Panning Model
+-}
+type PanningModel
+  = EqualPower
+  | HRTF
 
-{-| Distance Model -}
-type DistanceModel = Linear | Inverse | Exponential
 
-{-| Create a PannerNode -}
+{-| Distance Model
+-}
+type DistanceModel
+  = Linear
+  | Inverse
+  | Exponential
+
+
+{-| Create a PannerNode
+-}
 createPannerNode : AudioContext -> PannerNode
-createPannerNode = Native.WebAudio.createPannerNode
+createPannerNode =
+  Native.WebAudio.createPannerNode
 
-{-| Get the Panning Model of the Panner -}
+
+{-| Get the Panning Model of the Panner
+-}
 getPanningModel : PannerNode -> PanningModel
-getPanningModel = Native.WebAudio.getPanningModel
+getPanningModel =
+  Native.WebAudio.getPanningModel
+
 
 {-| Set the Panning Model of the Panner
 
 This function returns the PannerNode for chaining.
 -}
 setPanningModel : PanningModel -> PannerNode -> PannerNode
-setPanningModel = Native.WebAudio.setPanningModel
+setPanningModel =
+  Native.WebAudio.setPanningModel
 
-{-| Get the Distance Model of the Panner -}
+
+{-| Get the Distance Model of the Panner
+-}
 getDistanceModel : PannerNode -> DistanceModel
-getDistanceModel = Native.WebAudio.getDistanceModel
+getDistanceModel =
+  Native.WebAudio.getDistanceModel
+
 
 {-| Set the Distance Model of the Panner
 
 This function returns the PannerNode for chaining.
 -}
 setDistanceModel : DistanceModel -> PannerNode -> PannerNode
-setDistanceModel = Native.WebAudio.setDistanceModel
+setDistanceModel =
+  Native.WebAudio.setDistanceModel
 
-{-| Get the reference distance of the panner -}
+
+{-| Get the reference distance of the panner
+-}
 getReferenceDistance : PannerNode -> Float
-getReferenceDistance = Native.WebAudio.getReferenceDistance
+getReferenceDistance =
+  Native.WebAudio.getReferenceDistance
 
-{-| Set the reference distance of the panner -}
+
+{-| Set the reference distance of the panner
+-}
 setReferenceDistance : Float -> PannerNode -> PannerNode
-setReferenceDistance = Native.WebAudio.setReferenceDistance
+setReferenceDistance =
+  Native.WebAudio.setReferenceDistance
 
-{-| Get the max distance of the panner -}
+
+{-| Get the max distance of the panner
+-}
 getMaxDistance : PannerNode -> Float
-getMaxDistance = Native.WebAudio.getMaxDistance
+getMaxDistance =
+  Native.WebAudio.getMaxDistance
 
-{-| Set the max distance of the pannel -}
+
+{-| Set the max distance of the pannel
+-}
 setMaxDistance : Float -> PannerNode -> PannerNode
-setMaxDistance = Native.WebAudio.setMaxDistance
+setMaxDistance =
+  Native.WebAudio.setMaxDistance
 
-{-| Get the rolloff factor for the panner -}
+
+{-| Get the rolloff factor for the panner
+-}
 getRolloffFactor : PannerNode -> Float
-getRolloffFactor = Native.WebAudio.getRolloffFactor
+getRolloffFactor =
+  Native.WebAudio.getRolloffFactor
 
-{-| Set the rolloff factor for the panner -}
+
+{-| Set the rolloff factor for the panner
+-}
 setRolloffFactor : Float -> PannerNode -> PannerNode
-setRolloffFactor = Native.WebAudio.setRolloffFactor
+setRolloffFactor =
+  Native.WebAudio.setRolloffFactor
 
-{-| Get the cone inner angle for the panner -}
+
+{-| Get the cone inner angle for the panner
+-}
 getConeInnerAngle : PannerNode -> Float
-getConeInnerAngle = Native.WebAudio.getConeInnerAngle
+getConeInnerAngle =
+  Native.WebAudio.getConeInnerAngle
 
-{-| Set the cone inner angle for the panner -}
+
+{-| Set the cone inner angle for the panner
+-}
 setConeInnerAngle : Float -> PannerNode -> PannerNode
-setConeInnerAngle = Native.WebAudio.setConeInnerAngle
+setConeInnerAngle =
+  Native.WebAudio.setConeInnerAngle
 
-{-| Get the cone outer angle for the panner -}
+
+{-| Get the cone outer angle for the panner
+-}
 getConeOuterAngle : PannerNode -> Float
-getConeOuterAngle = Native.WebAudio.getConeOuterAngle
+getConeOuterAngle =
+  Native.WebAudio.getConeOuterAngle
 
-{-| Set the cone outer angle for the panner -}
+
+{-| Set the cone outer angle for the panner
+-}
 setConeOuterAngle : Float -> PannerNode -> PannerNode
-setConeOuterAngle = Native.WebAudio.setConeOuterAngle
+setConeOuterAngle =
+  Native.WebAudio.setConeOuterAngle
 
-{-| Get the cone outer gain for the panner -}
+
+{-| Get the cone outer gain for the panner
+-}
 getConeOuterGain : PannerNode -> Float
-getConeOuterGain = Native.WebAudio.getConeOuterGain
+getConeOuterGain =
+  Native.WebAudio.getConeOuterGain
 
-{-| Set the cone outer gain for the panner -}
+
+{-| Set the cone outer gain for the panner
+-}
 setConeOuterGain : Float -> PannerNode -> PannerNode
-setConeOuterGain = Native.WebAudio.setConeOuterGain
+setConeOuterGain =
+  Native.WebAudio.setConeOuterGain
 
-{-| Set the listener position for the panner -}
+
+{-| Set the listener position for the panner
+-}
 setPosition : Float -> Float -> Float -> PannerNode -> PannerNode
-setPosition = Native.WebAudio.setPosition
+setPosition =
+  Native.WebAudio.setPosition
 
-{-| Set the listener orientation for the panner -}
+
+{-| Set the listener orientation for the panner
+-}
 setOrientation : Float -> Float -> Float -> PannerNode -> PannerNode
-setOrientation = Native.WebAudio.setOrientation
+setOrientation =
+  Native.WebAudio.setOrientation
 
-{-| Set the listener velocity for the panner -}
+
+{-| Set the listener velocity for the panner
+-}
 setVelocity : Float -> Float -> Float -> PannerNode -> PannerNode
-setVelocity = Native.WebAudio.setVelocity
+setVelocity =
+  Native.WebAudio.setVelocity
 
 
 
 {- TODO: Type of a ScriptProcessorNode -}
 {- TODO: Type of a WaveShaperNode -}
-
