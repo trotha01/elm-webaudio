@@ -19,3 +19,10 @@ make sure you understand the concepts before trying to use this library. This
 library basically represents a fairly thin wrapper around the Web Audio API,
 so everything in the Web Audio API documentation applies.
 
+# Examples
+[scales](http://trotha01.github.io/elm-webaudio/examples/scales.html)
+[stream](http://trotha01.github.io/elm-webaudio/examples/stream.html)
+
+TODO: not currently working, need to add soundcloud id
+[visual](http://trotha01.github.io/elm-webaudio/examples/Visual.html)
+
