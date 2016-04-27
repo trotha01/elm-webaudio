@@ -21,6 +21,7 @@ so everything in the Web Audio API documentation applies.
 
 # Examples
 [scales](http://trotha01.github.io/elm-webaudio/examples/scales.html)
+
 [stream](http://trotha01.github.io/elm-webaudio/examples/stream.html)
 
 TODO: not currently working, need to add soundcloud id
