@@ -20,6 +20,8 @@ library basically represents a fairly thin wrapper around the Web Audio API,
 so everything in the Web Audio API documentation applies.
 
 # Examples
+[simple](http://trotha01.github.io/elm-webaudio/examples/simple.html)
+
 [scales](http://trotha01.github.io/elm-webaudio/examples/scales.html)
 
 [stream](http://trotha01.github.io/elm-webaudio/examples/stream.html)
