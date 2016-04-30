@@ -1,13 +1,33 @@
-# How to Compile Examples
+# Running the Examples
 
-To run the examples locally, you can use `elm-reactor` from the root folder to see Scales.elm and Stream.elm
+To run the examples locally (except for Visual.elm):
+```
+cd elm-webaudio
+elm-reactor
+```
 
-Or
+To compile the examples locally:
+```
+cd elm-webaudio
+elm-make examples/Simple.elm --output simple.html
+elm-make examples/Scales.elm --output scales.html
+elm-make examples/Stream.elm --output stream.html
+```
 
-From the root folder, you can run `elm-make examples/Scales.elm` and `elm-make examples/Stream.elm` to generate an index.html file
 
-
-To build the Visual.elm example, run from the root folder `elm-make examples/Visual.elm --output examples/Visual.js`.
-You can use `python -m SimpleHTTPServer 8080` to start a small http server and navigate to http://localhost:8080/examples/Visual.html
+## Visual.elm
 
 NOTE: you will need to add a soundcloud id to examples/Visual.html for that example to work
+
+To compile the Visual.elm example:
+```
+cd elm-webaudio
+elm-make examples/Visual.elm --output examples/Visual.js
+```
+
+To see the Visual.elm example locally, you can use the simple python server
+```
+python -m SimpleHTTPServer 8080
+```
+Now navigate to http://localhost:8080/examples/Visual.html
+

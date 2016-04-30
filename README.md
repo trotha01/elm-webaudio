@@ -27,5 +27,5 @@ so everything in the Web Audio API documentation applies.
 [stream](http://trotha01.github.io/elm-webaudio/examples/stream.html)
 
 TODO: not currently working, need to add soundcloud id
-[visual](http://trotha01.github.io/elm-webaudio/examples/Visual.html)
+[visual](http://trotha01.github.io/elm-webaudio/examples/visual.html)
 
