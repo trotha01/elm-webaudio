@@ -1,8 +1,8 @@
 elm-webaudio
 ============
 
-Forked from [bmatcuk](https://github.com/bmatcuk/elm-webaudio) and updated for
-elm 0.16.0
+Forked from [bmatcuk](https://github.com/bmatcuk/elm-webaudio) and started
+updating for elm 0.17 (WIP)
 
 To contribute, see the [contributing doc](CONTRIBUTING.md)
 

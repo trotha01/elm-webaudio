@@ -1,16 +1,4 @@
-Elm.Native.WebAudio = {};
-Elm.Native.WebAudio.make = function(elm) {
-  elm.Native = elm.Native || {};
-  elm.Native.WebAudio = elm.Native.WebAudio || {};
-  if (elm.Native.WebAudio.values) return elm.Native.WebAudio.values;
-
-  var Maybe = Elm.Maybe.make(elm);
-  var Signal = Elm.Signal.make(elm);
-  var List = Elm.Native.List.make(elm);
-  var toArray = List.toArray;
-  var fromArray = List.fromArray;
-
-
+var _trotha01$elm_webaudio$Native_WebAudio = function() {
 
   var values = {};
 
@@ -629,10 +617,14 @@ Elm.Native.WebAudio.make = function(elm) {
     return node;
   });
 
-  values.setVelocity = F4(function(x, y, z, node) {
-    node._node.setVelocity(x, y, z);
-    return node;
-  });
+  function setVelocity(){
+    return F4(function(x, y, z, node) {
+      node._node.setVelocity(x, y, z);
+      return node;
+    });
+  }
 
-  return elm.Native.WebAudio.values = values;
-};
+  return values;
+
+  // return elm.Native.WebAudio.values = values;
+}();

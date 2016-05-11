@@ -1,10 +1,9 @@
-module Main (..) where
+module Main exposing (..)
 
 import WebAudio exposing (OscillatorNode, AudioContext(DefaultContext), stopOscillator, setValue, startOscillator, getDestinationNode, connectNodes, OscillatorWaveType(..), createOscillatorNode)
-import Graphics.Element exposing (Element, empty)
-import StartApp.Simple as StartApp
-import Html exposing (text, button)
+import Html exposing (..)
 import Html.Events exposing (onClick)
+import Html.App exposing (beginnerProgram)
 
 
 -- Model
@@ -39,8 +38,8 @@ startMusic action model =
 -- View
 
 
-view address model =
-  button [ onClick address Play ] [ text "Play" ]
+view address =
+  button [ onClick Play ] [ text "Play" ]
 
 
 
@@ -48,4 +47,9 @@ view address model =
 
 
 main =
-  StartApp.start { model = model, view = view, update = startMusic }
+  beginnerProgram
+    { model = model
+    , view = view
+    , update = startMusic
+    }
+

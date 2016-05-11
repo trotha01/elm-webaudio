@@ -1,4 +1,4 @@
-module WebAudio (..) where
+module WebAudio exposing (..)
 
 {-| A module for accessing the Web Audio API via Elm.
 
@@ -39,7 +39,7 @@ could be accessed with: `node.frequency`
 @docs AudioParam, setValue, getValue, setValueAtTime, linearRampToValue, exponentialRampToValue, setTargetAtTime, setValueCurveAtTime, cancelScheduledValues
 
 # Adding missing functions
-@docs MediaStreamAudioSourceNode, OfflineAudioContext, createMediaStreamAudioSourceNode, loadAudioBufferFromUrl, startOfflineRendering
+@docs MediaStreamAudioSourceNode, OfflineAudioContext, startOfflineRendering
 
 # Audio Buffers
 
@@ -187,7 +187,7 @@ These nodes are currently unimplemented.
 -}
 
 import Native.WebAudio
-import UserMedia exposing (MediaStream)
+-- import UserMedia exposing (MediaStream)
 
 
 {-| The AudioContext
@@ -228,7 +228,7 @@ getCurrentTime =
 {-| The OfflineAudioContext
 -}
 type alias OfflineAudioContext =
-  { context : AudioContext, signal : Signal (Maybe AudioBuffer) }
+  { context : AudioContext, signal : (Maybe AudioBuffer) }
 
 
 {-| Create a new Offline AudioContext
@@ -331,11 +331,11 @@ type AudioBuffer
   = AudioBuffer
 
 
-{-| Load an Audio Buffer from a URL
--}
+{- Load an Audio Buffer from a URL
 loadAudioBufferFromUrl : AudioContext -> String -> Signal (Maybe AudioBuffer)
 loadAudioBufferFromUrl =
   Native.WebAudio.loadAudioBufferFromUrl
+-}
 
 
 {-| Retrieve the sample rate of the AudioBuffer
@@ -654,7 +654,7 @@ getFloatTimeDomainData =
 {-| Type of an AudioBufferSourceNode
 -}
 type alias AudioBufferSourceNode =
-  AudioNode { playbackRate : AudioParam, ended : Signal Bool }
+  AudioNode { playbackRate : AudioParam, ended : Bool }
 
 
 {-| Create an AudioBufferSourceNode
@@ -946,11 +946,11 @@ type alias MediaStreamAudioSourceNode =
   AudioNode {}
 
 
-{-| TODO: add documentation here
--}
+{- TODO: add documentation here
 createMediaStreamAudioSourceNode : AudioContext -> MediaStream -> MediaStreamAudioSourceNode
 createMediaStreamAudioSourceNode =
   Native.WebAudio.createMediaStreamAudioSourceNode
+-}
 
 
 
