@@ -10,7 +10,7 @@ import Html.App exposing (beginnerProgram)
 
 
 model =
-  0
+    0
 
 
 
@@ -18,20 +18,20 @@ model =
 
 
 type Action
-  = Play
+    = Play
 
 
 startMusic action model =
-  let
-    _ =
-      case action of
-        Play ->
-          createOscillatorNode DefaultContext Sine
-            |> connectNodes (getDestinationNode DefaultContext) 0 0
-            |> startOscillator 0.0
-            |> stopOscillator 1.0
-  in
-    model
+    let
+        _ =
+            case action of
+                Play ->
+                    createOscillatorNode DefaultContext Sine
+                        |> connectNodes (getDestinationNode DefaultContext) 0 0
+                        |> startOscillator 0.0
+                        |> stopOscillator 1.0
+    in
+        model
 
 
 
@@ -39,7 +39,7 @@ startMusic action model =
 
 
 view address =
-  button [ onClick Play ] [ text "Play" ]
+    button [ onClick Play ] [ text "Play" ]
 
 
 
@@ -47,9 +47,8 @@ view address =
 
 
 main =
-  beginnerProgram
-    { model = model
-    , view = view
-    , update = startMusic
-    }
-
+    beginnerProgram
+        { model = model
+        , view = view
+        , update = startMusic
+        }
